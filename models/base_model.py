@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-
+import sys
+sys.path.append("../")
 import models
 from uuid import uuid4
 from datetime import datetime
@@ -16,12 +17,15 @@ class BaseModel:
             for key, value in kwargs.items():
                 if key != "__class__":
                     if key == "updated_at" or key == "created_at":
-                        self.__dict__[key] = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                        self.__dict__[key] = datetime.strptime\
+                            (value, "%Y-%m-%dT%H:%M:%S.%f")
                     else:
                         self.__dict__[key] = value
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        else:
+            self.id = str(uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+            models.storage.new(self)
 
     def __str__(self):
         """This will display the BaseModel 
@@ -34,6 +38,7 @@ class BaseModel:
         """ This will display the current datetime"""
         
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """ This will return a dictionary 
