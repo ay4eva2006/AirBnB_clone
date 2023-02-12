@@ -95,10 +95,10 @@ class HBNBCommand(cmd.Cmd):
             print(eval(argl[0])().id)
             storage.save()
 
-    def do_show(self, arg):
-        """Usage: show <class> <id> or <class>.show(<id>)
+    """def do_show(self, arg):
+        Usage: show <class> <id> or <class>.show(<id>)
         Display the string representation of a class instance of a given id.
-        """
+        
         argl = parse(arg)
         objdict = storage.all()
         if len(argl) == 0:
@@ -110,7 +110,23 @@ class HBNBCommand(cmd.Cmd):
         elif "{}.{}".format(argl[0], argl[1]) not in objdict:
             print("** no instance found **")
         else:
-            print(objdict["{}.{}".format(argl[0], argl[1])])
+            print(objdict["{}.{}".format(argl[0], argl[1])])"""
+
+
+    def do_show(self, arg):
+        """Show an instance based on its ID"""
+        if not arg:
+            print("** class name missing **")
+            return
+        args = arg.split()
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+        try:
+            instance = storage.all()[args[0] + '.' + args[1]]
+            print(instance)
+        except KeyError:
+            print("** no instance found **")
 
     def do_destroy(self, arg):
         """Usage: destroy <class> <id> or <class>.destroy(<id>)
